@@ -1,70 +1,89 @@
-# Getting Started with Create React App
+# Dreamcatcher
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Dreamcatcher is a web application that allows users to log, search, and manage their dreams. The app is built with a Django backend and a React frontend.
 
-## Available Scripts
+## Features
+- Log dreams with details such as title, description, mood, and lucidity level.
+- Search dreams by title or description.
+- View a list of all logged dreams.
 
-In the project directory, you can run:
+## Technologies
+- **Backend**: Django (with Django REST Framework)
+- **Frontend**: React, Axios, TailwindCSS
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Ensure you have the following installed on your machine:
+- **Python 3.8+**
+- **Node.js** (v14 or newer)
+- **npm** or **yarn**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Setup Instructions
 
-### `npm test`
+### 1. Clone the Repository
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/whitleynl/dreamcatcher.git
+cd dreamcatcher
+```
 
-### `npm run build`
+### 2. Backend Setup (Django)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### a) Create a Virtual Environment
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+python3 -m venv env
+source env/bin/activate  # On Windows: env\Scripts\activate
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### b) Install Backend Dependencies
 
-### `npm run eject`
+```bash
+pip install -r requirements.txt
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### c) Apply Database Migrations
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+python manage.py migrate
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### d) Run the Backend Server
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+python manage.py runserver
+```
 
-## Learn More
+The Django backend will now be running at `http://localhost:8000`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 3. Frontend Setup (React)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### a) Navigate to the Frontend Directory and Install Dependencies
 
-### Code Splitting
+```bash
+cd dreamcatcher-frontend
+npm install
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### b) Run the Frontend Development Server
 
-### Analyzing the Bundle Size
+```bash
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The React frontend will be running at `http://localhost:3000`.
 
-### Making a Progressive Web App
+### 4. Access the Application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Once both the backend and frontend servers are running:
+- Open `http://localhost:3000` to access the app.
+- The frontend communicates with the Django API at `http://localhost:8000`.
 
-### Advanced Configuration
+## Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Ensure both backend and frontend servers are running for full functionality.
+- If you encounter any issues, check the browser console and backend logs for error messages.
 
-### Deployment
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License (whatever that means).
