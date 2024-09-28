@@ -1,0 +1,23 @@
+# Django-related
+*.pyc
+__pycache__/
+db.sqlite3
+*.sqlite3
+media/
+
+# Environment
+env/
+venv/
+.idea/
+.vscode/
+.DS_Store
+
+# Node (if using React as well)
+node_modules/
+
+# Other
+*.log
+*.pot
+*.mo
+*.swp
+*~
