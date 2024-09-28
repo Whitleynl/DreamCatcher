@@ -13,4 +13,9 @@ class DreamSearchView(generics.ListAPIView):
     def get_queryset(self):
         search = self.request.query_params.get('q', '')
         return Dream.objects.filter(Q(title__icontains=search) | Q(description__icontains=search))
+    
+class DreamDeleteView(generics.RetrieveDestroyAPIView):
+    queryset = Dream.objects.all()
+    serializer_class = DreamSerializer
+    lookup_field = 'id'
 
