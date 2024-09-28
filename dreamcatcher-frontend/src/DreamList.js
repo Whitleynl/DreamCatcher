@@ -3,22 +3,37 @@ import axios from 'axios';
 
 function DreamList() {
   const [dreams, setDreams] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const fetchDreams = async () => {
+    const fetchDreams = async (query = '') => {
       try {
-        const response = await axios.get('/api/dreams/');
+        const url = query
+          ? `http://localhost:8000/api/dreams/search/?q=${query}`
+          : 'http://localhost:8000/api/dreams/';
+
+        const response = await axios.get(url);
         setDreams(response.data);
       } catch (error) {
         console.error('Error fetching dreams:', error);
       }
     };
-    fetchDreams();
-  }, []);
 
+    useEffect(() => {
+        fetchDreams(searchTerm);
+      }, [searchTerm]);
+    
   return (
     <div className="p-8 bg-white shadow rounded-lg mt-8">
-      <h2 className="text-2xl font-bold mb-4">Dream List</h2>
+      <h2 className="text-2xl font-bold mb-4">Search Dreams</h2>
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search by title or description..."
+        className="p-2 border border-gray-300 rounded-full mb-4"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      {/* Dream List */}
       <ul>
         {dreams.map((dream) => (
           <li key={dream.id} className="mb-4">
