@@ -1,10 +1,12 @@
 import './App.css';
+import DreamForm from './DreamForm';
+import DreamList from './DreamList';
 
 function App() {
   return (
-    <div className="p-8 bg-blue-500 text-white">
-      <h1 className="text-3xl font-bold">Dreamcatcher App</h1>
-      <p className="mt-4">TailwindCSS is working!</p>
+    <div className="container mx-auto p-8">
+      <DreamForm />
+      <DreamList />
     </div>
   );
 }

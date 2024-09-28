@@ -18,7 +18,7 @@ class Dream(models.Model):
     lucidity_level = models.IntegerField()
     recurring = models.BooleanField()
     key_symbols = models.CharField(max_length=255, null=True, blank=True)    
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
         return self.title
