@@ -10,7 +10,7 @@ function DreamForm() {
   const handleSubmit = async (event) => { 
     event.preventDefault(); 
     try {
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}`, {
+      await axios.post(`${apiUrl}`, {
         title,
         description,
         mood: "neutral",  // Temporary fixed values

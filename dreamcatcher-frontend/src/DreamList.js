@@ -4,34 +4,34 @@ import axios from 'axios';
 function DreamList() {
   const [dreams, setDreams] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
-    const fetchDreams = async (query = '') => {
-      try {
-        const baseUrl = process.env.REACT_APP_BACKEND_URL;
-        const url = query
-          ? `${baseUrl}search/?q=${query}`
-          : '${baseUrl}';
+  const fetchDreams = async (query = '') => {
+    try {
+      const url = query
+        ? `${apiUrl}search/?q=${query}`
+        : `${apiUrl}`;
 
-        const response = await axios.get(url);
-        setDreams(response.data);
-      } catch (error) {
-        console.error('Error fetching dreams:', error);
-      }
-    };
+      const response = await axios.get(url);
+      setDreams(response.data);
+    } catch (error) {
+      console.error('Error fetching dreams:', error);
+    }
+  };
 
-    const deleteDream = async (id) => {
-      try {
-        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}${id}/`);
-        setDreams(dreams.filter((dream) => dream.id !== id)); 
-      } catch (error) {
-        console.error('Error deleting dream:', error);
-      }
-    };
+  const deleteDream = async (id) => {
+    try {
+      await axios.delete(`${apiUrl}${id}/`);
+      setDreams(dreams.filter((dream) => dream.id !== id)); 
+    } catch (error) {
+      console.error('Error deleting dream:', error);
+    }
+  };
 
-    useEffect(() => {
-        fetchDreams(searchTerm);
-      }, [searchTerm]);
-    
+  useEffect(() => {
+    fetchDreams(searchTerm);
+  }, [searchTerm]);
+
   return (
     <div className="p-8 bg-white shadow rounded-lg mt-8">
       <h2 className="text-2xl font-bold mb-4">Search Dreams</h2>
@@ -53,7 +53,7 @@ function DreamList() {
               {/* Delete Button */}
               <button
                 className="bg-red-500 text-white px-3 py-1 rounded"
-                onClick={() => deleteDream(dream.id)}  // Call deleteDream on click
+                onClick={() => deleteDream(dream.id)}
               >
                 Delete
               </button>
@@ -66,6 +66,5 @@ function DreamList() {
     </div>
   );
 }
-
 
 export default DreamList;
