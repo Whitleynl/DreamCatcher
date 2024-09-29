@@ -21,7 +21,7 @@ function DreamList() {
 
     const deleteDream = async (id) => {
       try {
-        await axios.delete(`https://dreamcatcher-backend-8a5111414779.herokuapp.com/api/dreams/${id}/`);
+        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}${id}/`);
         setDreams(dreams.filter((dream) => dream.id !== id)); 
       } catch (error) {
         console.error('Error deleting dream:', error);
