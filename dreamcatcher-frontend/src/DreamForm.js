@@ -8,6 +8,7 @@ function DreamForm() {
   const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleSubmit = async (event) => { 
+    console.log('API URL:', apiUrl);
     event.preventDefault(); 
     try {
       await axios.post(`${apiUrl}`, {
