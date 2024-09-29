@@ -9,7 +9,7 @@ function DreamForm() {
   const handleSubmit = async (event) => { 
     event.preventDefault(); 
     try {
-      await axios.post('http://localhost:8000/api/dreams/', {
+      await axios.post('https://dreamcatcher-backend-8a5111414779.herokuapp.com/api/dreams/', {
         title,
         description,
         mood: "neutral",  // Temporary fixed values
