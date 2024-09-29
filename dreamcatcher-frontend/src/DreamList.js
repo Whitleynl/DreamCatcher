@@ -7,9 +7,10 @@ function DreamList() {
 
     const fetchDreams = async (query = '') => {
       try {
+        const baseUrl = process.env.REACT_APP_BACKEND_URL;
         const url = query
-          ? `https://dreamcatcher-backend-8a5111414779.herokuapp.com/api/dreams/search/?q=${query}`
-          : 'https://dreamcatcher-backend-8a5111414779.herokuapp.com/api/dreams/';
+          ? `${baseUrl}search/?q=${query}`
+          : '${baseUrl}';
 
         const response = await axios.get(url);
         setDreams(response.data);

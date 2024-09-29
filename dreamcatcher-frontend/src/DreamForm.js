@@ -5,11 +5,12 @@ function DreamForm() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState(''); 
+  const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleSubmit = async (event) => { 
     event.preventDefault(); 
     try {
-      await axios.post('https://dreamcatcher-backend-8a5111414779.herokuapp.com/api/dreams/', {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}`, {
         title,
         description,
         mood: "neutral",  // Temporary fixed values
