@@ -8,8 +8,8 @@ function DreamList() {
     const fetchDreams = async (query = '') => {
       try {
         const url = query
-          ? `http://localhost:8000/api/dreams/search/?q=${query}`
-          : 'http://localhost:8000/api/dreams/';
+          ? `https://dreamcatcher-backend-8a5111414779.herokuapp.com/api/dreams/search/?q=${query}`
+          : 'https://dreamcatcher-backend-8a5111414779.herokuapp.com/api/dreams/';
 
         const response = await axios.get(url);
         setDreams(response.data);
@@ -20,7 +20,7 @@ function DreamList() {
 
     const deleteDream = async (id) => {
       try {
-        await axios.delete(`http://localhost:8000/api/dreams/${id}/`);
+        await axios.delete(`https://dreamcatcher-backend-8a5111414779.herokuapp.com/api/dreams/${id}/`);
         setDreams(dreams.filter((dream) => dream.id !== id)); 
       } catch (error) {
         console.error('Error deleting dream:', error);
