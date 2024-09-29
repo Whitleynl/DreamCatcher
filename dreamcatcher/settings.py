@@ -67,7 +67,7 @@ WSGI_APPLICATION = "dreamcatcher.wsgi.application"
 # Database Configuration
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://localhost:5432/your-local-db'
+        default='postgres://nathanwhitley:Fenderstratt07@localhost:5432/dreamcatcher_db',
     )
 }
 
