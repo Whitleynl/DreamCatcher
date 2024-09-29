@@ -9,12 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [
-    'dreamcatcher-backend-b95aba673a0c.herokuapp.com',
-    'dream-catcher-plum.vercel.app',
-]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
