@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 SITE_ID = 1
 
@@ -52,6 +52,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'https://dream-catcher-plum.vercel.app',
     'http://localhost:3000',
+    'https://dream-catcher-hw5ivp01n-whitleynls-projects.vercel.app',
 ]
 
 #Email Configuration
