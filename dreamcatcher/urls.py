@@ -25,6 +25,7 @@ def home(request):
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/dreams/', include('dream_entries.urls')),
-    path('accounts/', include('allauth.urls')),
+    path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     path('', home, name='home'),
 ]

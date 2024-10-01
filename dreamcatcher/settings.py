@@ -9,11 +9,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 SITE_ID = 1
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'] 
 
 # Application definition
 
@@ -26,11 +26,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework.authtoken",
     "dream_entries",
     "django.contrib.sites",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
 ]
 
 MIDDLEWARE = [
@@ -50,6 +53,15 @@ CORS_ALLOWED_ORIGINS = [
     'https://dream-catcher-plum.vercel.app',
     'http://localhost:3000',
 ]
+
+#Email Configuration
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+ACCOUNT_EMAIL_VERIFICATION = "username"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
 
 ROOT_URLCONF = "dreamcatcher.urls"
 
@@ -86,6 +98,16 @@ if 'DATABASE_URL' in os.environ:
             'sslmode': 'require',
         }
     }) 
+    
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

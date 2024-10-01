@@ -14,7 +14,7 @@ function DreamForm() {
       await axios.post(`${apiUrl}`, {
         title,
         description,
-        mood: "neutral",  // Temporary fixed values
+        mood: "neutral", 
         lucidity_level: 3,
         recurring: false,
         key_symbols: "None"
