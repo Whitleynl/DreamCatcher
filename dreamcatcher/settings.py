@@ -49,11 +49,7 @@ MIDDLEWARE = [
 ]
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    'https://dream-catcher-plum.vercel.app',
-    'http://localhost:3000',
-    'https://dream-catcher-hw5ivp01n-whitleynls-projects.vercel.app',
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 #Email Configuration
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
