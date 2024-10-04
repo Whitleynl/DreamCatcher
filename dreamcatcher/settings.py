@@ -55,6 +55,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 #Email Configuration
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
 ACCOUNT_EMAIL_VERIFICATION = "username"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "optional"
@@ -96,7 +101,7 @@ if 'DATABASE_URL' in os.environ:
             'sslmode': 'require',
         }
     }) 
-    
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
