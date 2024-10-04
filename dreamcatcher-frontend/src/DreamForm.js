@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from './api';
 
 function DreamForm() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState(''); 
-  const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleSubmit = async (event) => { 
-    console.log('API URL:', apiUrl);
     event.preventDefault(); 
     try {
-      await axios.post(`${apiUrl}`, {
+      await api.post('dreams/', {
         title,
         description,
         mood: "neutral", 
