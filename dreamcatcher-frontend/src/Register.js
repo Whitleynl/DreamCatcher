@@ -10,6 +10,8 @@ const Register = () => {
     password1: '',
     password2: '',
   });
+  const [success, setSuccess] = useState(false); // <-- Add it here
+
   const { setAuthToken } = useContext(AuthContext);
   const navigate = useNavigate(); 
 
@@ -21,44 +23,62 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await api.post('auth/registration/', formData);
-      setAuthToken(response.data.key);
+
+      if (response.status === 204) {
+        console.log("Registration successful with no additional response data.");
+        setSuccess(true);
+        setAuthToken('');
+      } else {
+        setAuthToken(response.data.key);
+        setSuccess(true);
+      }
+      
       navigate('/');
     } catch (error) {
-      console.error('Registration error:', error.response.data);
+      if (error.response) {
+        console.error('Registration error:', error.response.data);
+      } else {
+        console.error('An error occurred:', error.message);
+      }
     }
   };
 
   return (
-    <form onSubmit={handleRegister}>
-      <input
-        name="username"
-        placeholder="Username"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="password1"
-        type="password"
-        placeholder="Password"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="password2"
-        type="password"
-        placeholder="Confirm Password"
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Register</button>
-    </form>
+    <div>
+      {success ? (
+        <div>Registration successful! Welcome!</div>
+      ) : (
+        <form onSubmit={handleRegister}>
+          <input
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="password1"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="password2"
+            type="password"
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Register</button>
+        </form>
+      )}
+    </div>
   );
 };
 
