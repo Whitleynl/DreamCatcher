@@ -22,7 +22,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('auth/registration/', formData);
+      const response = await api.post('/auth/registration/', formData);
 
       if (response.status === 204) {
         console.log("Registration successful with no additional response data.");
