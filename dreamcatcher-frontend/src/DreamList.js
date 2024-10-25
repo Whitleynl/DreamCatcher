@@ -11,11 +11,17 @@ function DreamList() {
       setError(null);
       const url = query ? `dreams/search/?q=${query}` : 'dreams/';
       console.log('Fetching dreams from:', url);
+      console.log('Request headers:', api.defaults.headers);
       const response = await api.get(url);
       setDreams(response.data);
     } catch (error) {
-      console.error('Error fetching dreams:', error);
-      setError('Failed to fetch dreams');
+      console.error('Error fetching dreams:', {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        headers: error.response?.headers
+      });
+      setError(error.response?.status === 401 ? 'Authentication failed. Please try logging in again.' : 'Failed to fetch dreams');
     }
   };
 

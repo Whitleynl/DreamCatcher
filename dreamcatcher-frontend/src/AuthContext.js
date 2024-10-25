@@ -111,11 +111,13 @@ export const AuthProvider = ({ children }) => {
     console.log('Auth token changed:', authToken ? 'Token present' : 'No token');
     if (authToken) {
       localStorage.setItem("authToken", authToken);
+      console.log('Setting authorization header with token format:', `Token ${authToken}`);
       api.defaults.headers.common["Authorization"] = `Token ${authToken}`;
-      console.log('Set auth header and local storage');
+      authApi.defaults = api.defaults;
     } else {
       localStorage.removeItem("authToken");
       delete api.defaults.headers.common["Authorization"];
+      delete authApi.defaults?.headers?.common?.["Authorization"];
       console.log('Cleared auth header and local storage');
     }
   }, [authToken]);

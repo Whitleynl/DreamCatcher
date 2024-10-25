@@ -6,15 +6,21 @@ console.log('Creating API with baseURL:', baseURL);
 
 const api = axios.create({
   baseURL,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+api.interceptors.request.use(request => {
+    console.log('Making request to:', request.url);
+    console.log('With headers:', request.headers);
+    return request;
 });
 
 export const authApi = {
-  register: (userData) => {
-    console.log('Making registration request to:', `${baseURL}/auth/registration/`);
-    return api.post('/auth/registration/', userData);
-  },
-  login: (credentials) => api.post('/auth/login/', credentials),
-  logout: () => api.post('/auth/logout/')
+ register: (userData) => api.post('/auth/registration/', userData),
+ login: (credentials) => api.post('/auth/login/', credentials),
+ logout: () => api.post('/auth/logout/')
 };
 
 export default api;
