@@ -9,21 +9,40 @@ function DreamList() {
   const fetchDreams = async (query = '') => {
     try {
       setError(null);
+      // Log the current authorization header
+      console.log('Current Auth Header:', api.defaults.headers.common['Authorization']);
+      
       const url = query ? `dreams/search/?q=${query}` : 'dreams/';
       console.log('Fetching dreams from:', url);
-      console.log('Request headers:', api.defaults.headers);
+      
       const response = await api.get(url);
+      console.log('Dreams fetch successful:', response.data);
       setDreams(response.data);
     } catch (error) {
-      console.error('Error fetching dreams:', {
-        message: error.message,
+      console.error('Dream fetch error:', {
         status: error.response?.status,
         data: error.response?.data,
-        headers: error.response?.headers
+        headers: error.config?.headers // Log what headers were sent
       });
-      setError(error.response?.status === 401 ? 'Authentication failed. Please try logging in again.' : 'Failed to fetch dreams');
+      
+      if (error.response?.status === 401) {
+        console.log('Auth token present but request failed:', localStorage.getItem('authToken'));
+      }
+      
+      setError(
+        error.response?.status === 401 
+          ? 'Authentication failed. Please try logging in again.' 
+          : `Failed to fetch dreams: ${error.response?.data?.detail || error.message}`
+      );
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    console.log('DreamList mounted, token exists:', !!token);
+    fetchDreams(searchTerm);
+  }, [searchTerm]);
+
 
   const deleteDream = async (id) => {
     try {
@@ -35,10 +54,6 @@ function DreamList() {
       setError('Failed to delete dream');
     }
   };
-
-  useEffect(() => {
-    fetchDreams(searchTerm);
-  }, [searchTerm]);
 
   return (
     <div className="p-8 bg-white shadow rounded-lg mt-8">
