@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from './AuthContext';
 import api from './api';
 
 function DreamList() {
   const [dreams, setDreams] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
+  const { authToken } = useContext(AuthContext);
 
   const fetchDreams = async (query = '') => {
     try {
       setError(null);
-      // Log the current authorization header
+      
+      // Set auth header explicitly before request
+      if (authToken) {
+        api.defaults.headers.common['Authorization'] = `Token ${authToken}`;
+      }
+      
       console.log('Current Auth Header:', api.defaults.headers.common['Authorization']);
       
       const url = query ? `dreams/search/?q=${query}` : 'dreams/';
@@ -22,13 +29,8 @@ function DreamList() {
       console.error('Dream fetch error:', {
         status: error.response?.status,
         data: error.response?.data,
-        headers: error.config?.headers // Log what headers were sent
+        headers: error.config?.headers
       });
-      
-      if (error.response?.status === 401) {
-        console.log('Auth token present but request failed:', localStorage.getItem('authToken'));
-      }
-      
       setError(
         error.response?.status === 401 
           ? 'Authentication failed. Please try logging in again.' 
@@ -37,23 +39,13 @@ function DreamList() {
     }
   };
 
+  // Call fetchDreams when authToken changes
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    console.log('DreamList mounted, token exists:', !!token);
-    fetchDreams(searchTerm);
-  }, [searchTerm]);
-
-
-  const deleteDream = async (id) => {
-    try {
-      setError(null);
-      await api.delete(`dreams/${id}/`);
-      setDreams(dreams.filter((dream) => dream.id !== id));
-    } catch (error) {
-      console.error('Error deleting dream:', error);
-      setError('Failed to delete dream');
+    if (authToken) {
+      console.log('Token updated, fetching dreams...');
+      fetchDreams(searchTerm);
     }
-  };
+  }, [authToken, searchTerm]);
 
   return (
     <div className="p-8 bg-white shadow rounded-lg mt-8">
@@ -63,7 +55,6 @@ function DreamList() {
           {error}
         </div>
       )}
-      {/* Search Input */}
       <input
         type="text"
         placeholder="Search by title or description..."
@@ -71,14 +62,12 @@ function DreamList() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      {/* Dream List */}
       <ul className="space-y-4">
         {dreams.length > 0 ? (
           dreams.map((dream) => (
             <li key={dream.id} className="p-4 border rounded">
               <h3 className="text-xl font-semibold">{dream.title}</h3>
               <p className="mt-2">{dream.description}</p>
-              {/* Delete Button */}
               <button
                 className="mt-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                 onClick={() => deleteDream(dream.id)}
