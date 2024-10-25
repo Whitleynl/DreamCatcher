@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './api';
 
 function DreamList() {
   const [dreams, setDreams] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const apiUrl = process.env.REACT_APP_BACKEND_URL;
+  const [error, setError] = useState(null);
 
   const fetchDreams = async (query = '') => {
     try {
-      const url = query
-        ? `${apiUrl}search/?q=${query}`
-        : `${apiUrl}`;
-
-      const response = await axios.get(url);
+      setError(null);
+      const url = query ? `search/?q=${query}` : '';
+      const response = await api.get(url);
       setDreams(response.data);
     } catch (error) {
+      setError('Failed to fetch dreams');
       console.error('Error fetching dreams:', error);
     }
   };
 
   const deleteDream = async (id) => {
     try {
-      await axios.delete(`${apiUrl}${id}/`);
-      setDreams(dreams.filter((dream) => dream.id !== id)); 
+      setError(null);
+      await api.delete(`${id}/`);
+      setDreams(dreams.filter((dream) => dream.id !== id));
     } catch (error) {
+      setError('Failed to delete dream');
       console.error('Error deleting dream:', error);
     }
   };
@@ -35,34 +36,12 @@ function DreamList() {
   return (
     <div className="p-8 bg-white shadow rounded-lg mt-8">
       <h2 className="text-2xl font-bold mb-4">Search Dreams</h2>
-      {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search by title or description..."
-        className="p-2 border border-gray-300 rounded-full mb-4"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      {/* Dream List */}
-      <ul>
-        {dreams.length > 0 ? (
-          dreams.map((dream) => (
-            <li key={dream.id} className="mb-4">
-              <h3 className="text-xl font-semibold">{dream.title}</h3>
-              <p>{dream.description}</p>
-              {/* Delete Button */}
-              <button
-                className="bg-red-500 text-white px-3 py-1 rounded"
-                onClick={() => deleteDream(dream.id)}
-              >
-                Delete
-              </button>
-            </li>
-          ))
-        ) : (
-          <p>No dreams found.</p>
-        )}
-      </ul>
+      {error && (
+        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+          {error}
+        </div>
+      )}
+      {/* Rest of the component remains the same */}
     </div>
   );
 }

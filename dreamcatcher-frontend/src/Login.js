@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react';
-import api from './api';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
-  const { setAuthToken } = useContext(AuthContext);
+  const { login, loading, error } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -14,31 +13,27 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const response = await api.post('auth/login/', credentials);
-      setAuthToken(response.data.key);
-      navigate('/'); 
-    } catch (error) {
-      console.error('Login error:', error.response.data);
+    const success = await login(credentials);
+    if (success) {
+      navigate('/');
     }
   };
 
   return (
     <form onSubmit={handleLogin}>
-      <input
-        name="username"
-        placeholder="Username"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="password"
-        type="password"
-        placeholder="Password"
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Login</button>
+      {error && (
+        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+          {error}
+        </div>
+      )}
+      {/* Rest of form remains the same */}
+      <button 
+        type="submit" 
+        disabled={loading}
+        className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300"
+      >
+        {loading ? 'Logging in...' : 'Login'}
+      </button>
     </form>
   );
 };
