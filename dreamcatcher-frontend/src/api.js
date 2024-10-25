@@ -1,18 +1,20 @@
 import axios from 'axios';
 
-console.log('Creating API with baseURL:', process.env.REACT_APP_BACKEND_URL);
+// Remove any trailing slashes from the base URL
+const baseURL = process.env.REACT_APP_BACKEND_URL.replace(/\/$/, '');
+console.log('Creating API with baseURL:', baseURL);
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_URL,
+  baseURL,
 });
 
 export const authApi = {
   register: (userData) => {
-    console.log('Making registration request to:', `${process.env.REACT_APP_BACKEND_URL}/auth/registration/`);
+    console.log('Making registration request to:', `${baseURL}/auth/registration/`);
     return api.post('/auth/registration/', userData);
   },
   login: (credentials) => api.post('/auth/login/', credentials),
-  logout: () => api.post('/auth/logout/'),
+  logout: () => api.post('/auth/logout/')
 };
 
 export default api;
