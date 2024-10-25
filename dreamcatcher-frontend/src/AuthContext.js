@@ -1,52 +1,79 @@
 import React, { createContext, useState, useEffect } from "react";
-import api from "./api";
+import api, { authApi } from './api';
 
-import React, { useState, useEffect } from 'react';
-import api from './api';
+export const AuthContext = createContext();
 
-function DreamList() {
-  const [dreams, setDreams] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+export const AuthProvider = ({ children }) => {
+  const [authToken, setAuthToken] = useState(localStorage.getItem("authToken"));
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchDreams = async (query = '') => {
+  const login = async (credentials) => {
     try {
+      setLoading(true);
       setError(null);
-      const url = query ? `search/?q=${query}` : '';
-      const response = await api.get(url);
-      setDreams(response.data);
+      const response = await authApi.login(credentials);
+      setAuthToken(response.data.key);
+      return true;
     } catch (error) {
-      setError('Failed to fetch dreams');
-      console.error('Error fetching dreams:', error);
+      setError(error.response?.data?.detail || 'Login failed');
+      return false;
+    } finally {
+      setLoading(false);
     }
   };
 
-  const deleteDream = async (id) => {
+  const logout = async () => {
     try {
+      setLoading(true);
       setError(null);
-      await api.delete(`${id}/`);
-      setDreams(dreams.filter((dream) => dream.id !== id));
+      await authApi.logout();
     } catch (error) {
-      setError('Failed to delete dream');
-      console.error('Error deleting dream:', error);
+      console.error('Logout error:', error);
+    } finally {
+      setAuthToken(null);
+      setLoading(false);
+    }
+  };
+
+  const register = async (userData) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await authApi.register(userData);
+      if (response.data?.key) {
+        setAuthToken(response.data.key);
+      }
+      return true;
+    } catch (error) {
+      setError(error.response?.data || 'Registration failed');
+      return false;
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDreams(searchTerm);
-  }, [searchTerm]);
+    if (authToken) {
+      localStorage.setItem("authToken", authToken);
+      api.defaults.headers.common["Authorization"] = `Token ${authToken}`;
+    } else {
+      localStorage.removeItem("authToken");
+      delete api.defaults.headers.common["Authorization"];
+    }
+  }, [authToken]);
 
   return (
-    <div className="p-8 bg-white shadow rounded-lg mt-8">
-      <h2 className="text-2xl font-bold mb-4">Search Dreams</h2>
-      {error && (
-        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
-      )}
-      {/* Rest of the component remains the same */}
-    </div>
+    <AuthContext.Provider value={{ 
+      authToken, 
+      loading, 
+      error,
+      login,
+      logout,
+      register,
+      setError 
+    }}>
+      {children}
+    </AuthContext.Provider>
   );
-}
-
-export default DreamList;
+};
