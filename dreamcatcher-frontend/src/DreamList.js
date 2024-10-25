@@ -39,6 +39,20 @@ function DreamList() {
     }
   };
 
+  // Add back the deleteDream function
+  const deleteDream = async (id) => {
+    try {
+      if (authToken) {
+        api.defaults.headers.common['Authorization'] = `Token ${authToken}`;
+      }
+      await api.delete(`dreams/${id}/`);
+      setDreams(dreams.filter((dream) => dream.id !== id));
+    } catch (error) {
+      console.error('Error deleting dream:', error);
+      setError('Failed to delete dream');
+    }
+  };
+
   // Call fetchDreams when authToken changes
   useEffect(() => {
     if (authToken) {
