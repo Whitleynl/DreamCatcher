@@ -1,27 +1,34 @@
 import React, { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
-import api from './api'; 
+
 const Logout = () => {
-  const { setAuthToken } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await api.post('auth/logout/');
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      setAuthToken(null);
-      navigate('/login');
-    }
-  };
-
   React.useEffect(() => {
-    handleLogout();
-  }, []);
+    const handleLogout = async () => {
+      try {
+        console.log('Starting logout process');
+        await logout();
+        console.log('Logout successful, navigating to login');
+        navigate('/login');
+      } catch (error) {
+        console.error('Logout failed:', error);
+        // Navigate anyway since we want to force logout
+        navigate('/login');
+      }
+    };
 
-  return <div>Logging out...</div>;
+    handleLogout();
+  }, [logout, navigate]);
+
+  return (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <span className="ml-2">Logging out...</span>
+    </div>
+  );
 };
 
 export default Logout;

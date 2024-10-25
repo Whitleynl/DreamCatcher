@@ -1,21 +1,34 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 
 const NavBar = () => {
-  const { authToken } = useContext(AuthContext);
+  const { authToken, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+    // Force a page refresh to clear any stale state
+    window.location.reload();
+  };
 
   return (
-    <nav>
+    <nav className="flex justify-between items-center mb-8 p-4 bg-white shadow rounded">
       {authToken ? (
         <>
-          <Link to="/">Home</Link>
-          <Link to="/logout">Logout</Link>
+          <Link to="/" className="text-blue-500 hover:text-blue-700">Home</Link>
+          <button 
+            onClick={handleLogout}
+            className="text-red-500 hover:text-red-700"
+          >
+            Logout
+          </button>
         </>
       ) : (
         <>
-          <Link to="/login">Login</Link>
-          <Link to="/register">Register</Link>
+          <Link to="/login" className="text-blue-500 hover:text-blue-700">Login</Link>
+          <Link to="/register" className="text-blue-500 hover:text-blue-700">Register</Link>
         </>
       )}
     </nav>
