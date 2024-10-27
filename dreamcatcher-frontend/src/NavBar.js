@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import { ReactComponent as Logo } from './logo.svg';
+import { ReactComponent as LogoSVG } from './logo.svg';
 
 const Logo = () => (
   <div className="relative group">
