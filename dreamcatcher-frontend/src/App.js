@@ -42,7 +42,7 @@ function App() {
                 path="/"
                 element={
                   <ProtectedRoute>
-                    <div>
+                    <div className="space-y-8">
                       <DreamList />
                       <DreamForm />
                     </div>
