@@ -35,9 +35,9 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between mb-8 p-6 bg-gray-800 shadow rounded">
+    <nav className="flex items-center justify-between mb-8 p-3 bg-gray-800 shadow rounded"> {/* changed p-6 to p-3 */}
       {/* Left section */}
-      <div className="w-24">
+      <div className="w-32"> {/* increased from w-24 for better balance */}
         {authToken ? (
           <Link to="/" className="text-blue-400 hover:text-blue-300 transition-colors">
             Home
@@ -50,12 +50,14 @@ const NavBar = () => {
       </div>
 
       {/* Center section - Logo */}
-      <Link to="/" className="flex justify-center items-center py-2">
-        <Logo />
-      </Link>
+      <div className="flex-1 flex justify-center"> {/* Added flex-1 and flex justify-center */}
+        <Link to="/">
+          <Logo />
+        </Link>
+      </div>
 
       {/* Right section */}
-      <div className="w-24 text-right">
+      <div className="w-32 text-right"> {/* increased from w-24 for better balance */}
         {authToken ? (
           <button 
             onClick={handleLogout}
