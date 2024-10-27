@@ -57,8 +57,8 @@ function DreamList() {
   }, [authToken, searchTerm]);
 
   return (
-    <div className="p-8 bg-gray-800 shadow rounded-lg mt-8">
-      <h2 className="text-2xl font-bold mb-4 text-gray-100">Search Dreams</h2>
+    <div className="p-4 sm:p-8 bg-gray-800 shadow rounded-lg mt-4">
+      <h2 className="text-xl font-bold mb-4 text-gray-100">Search Dreams</h2>
       {error && (
         <div className="p-3 mb-4 bg-red-900/50 text-red-300 rounded">
           {error}
@@ -67,7 +67,7 @@ function DreamList() {
       <input
         type="text"
         placeholder="Search by title or description..."
-        className="p-2 bg-gray-700 border border-gray-600 rounded-full mb-4 w-full text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        className="p-2 w-full bg-gray-700 border border-gray-600 rounded text-gray-100 placeholder-gray-400 mb-4"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />

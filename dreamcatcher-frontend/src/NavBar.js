@@ -5,7 +5,7 @@ import { AuthContext } from './AuthContext';
 const Logo = () => (
   <svg 
     viewBox="0 0 1554 413" 
-    className="w-96 h-auto text-gray-100"
+    className="w-48 sm:w-96 h-auto text-gray-100"
     fill="currentColor"
   >
     {/* Text paths */}
@@ -37,7 +37,7 @@ const NavBar = () => {
   return (
     <nav className="flex items-center justify-between mb-8 p-3 bg-gray-800 shadow rounded"> {/* changed p-6 to p-3 */}
       {/* Left section */}
-      <div className="w-32"> {/* increased from w-24 for better balance */}
+      <div className="w-16 sm:w-32"> {/* increased from w-24 for better balance */}
         {authToken ? (
           <Link to="/" className="text-blue-400 hover:text-blue-300 transition-colors">
             Home
@@ -50,23 +50,23 @@ const NavBar = () => {
       </div>
 
       {/* Center section - Logo */}
-      <div className="flex-1 flex justify-center"> {/* Added flex-1 and flex justify-center */}
+      <div className="flex-1 flex justify-center max-w-[200px] sm:max-w-none"> {/* Added flex-1 and flex justify-center */}
         <Link to="/">
           <Logo />
         </Link>
       </div>
 
       {/* Right section */}
-      <div className="w-32 text-right"> {/* increased from w-24 for better balance */}
+      <div className="w-16 sm:w-32 text-right"> {/* increased from w-24 for better balance */}
         {authToken ? (
           <button 
             onClick={handleLogout}
-            className="text-red-400 hover:text-red-300 transition-colors"
+            className="text-red-400 hover:text-red-300 transition-colors text-sm sm:text-base"
           >
             Logout
           </button>
         ) : (
-          <Link to="/register" className="text-blue-400 hover:text-blue-300 transition-colors">
+          <Link to="/register" className="text-blue-400 hover:text-blue-300 transition-colors text-sm sm:text-base">
             Register
           </Link>
         )}

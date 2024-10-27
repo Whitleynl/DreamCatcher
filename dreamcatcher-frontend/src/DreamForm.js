@@ -27,8 +27,8 @@ function DreamForm() {
   };
 
   return (
-    <div className="p-8 bg-gray-800 shadow rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-gray-100">Submit a New Dream</h2>
+    <div className="p-4 sm:p-8 bg-gray-800 shadow rounded-lg">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-100">Submit a New Dream</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-300 mb-2">Title</label>
@@ -37,7 +37,7 @@ function DreamForm() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Dream title"
-            className="p-2 bg-gray-700 border border-gray-600 rounded w-full text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="p-2 w-full bg-gray-700 border border-gray-600 rounded text-gray-100 placeholder-gray-400"
             required
           />
         </div>
@@ -47,13 +47,13 @@ function DreamForm() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe your dream"
-            className="p-2 bg-gray-700 border border-gray-600 rounded w-full text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 h-32"
+            className="p-2 w-full bg-gray-700 border border-gray-600 rounded text-gray-100 placeholder-gray-400 h-32"
             required
           />
         </div>
         <button 
           type="submit" 
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full sm:w-auto"
         >
           Submit Dream
         </button>
