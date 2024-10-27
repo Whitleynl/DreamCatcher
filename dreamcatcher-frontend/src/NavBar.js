@@ -30,47 +30,31 @@ const NavBar = () => {
 
   return (
     <nav className="flex items-center justify-between mb-8 p-3 bg-gray-800 shadow rounded">
-      {/* Left section */}
-      <div className="w-16 sm:w-32">
-        {authToken ? (
-          <Link
-            to="/"
-            className="text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            Home
-          </Link>
-        ) : (
-          <Link
-            to="/login"
-            className="text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            Login
-          </Link>
-        )}
+      {/* Left section - now empty */}
+      <div className="w-8 sm:w-16">
+        {/* Empty div to maintain spacing */}
       </div>
 
-      {/* Center section - Logo */}
-      <div className="flex-1 flex justify-center max-w-[200px] sm:max-w-none">
-        <Link to="/">
-          <Logo />
-        </Link>
-      </div>
+      {/* Center section - Logo (acts as home button) */}
+      <Link to="/" className="flex justify-center items-center">
+        <Logo />
+      </Link>
 
-      {/* Right section */}
-      <div className="w-16 sm:w-32 text-right">
+      {/* Right section - only Logout/Login */}
+      <div className="w-8 sm:w-16 text-right">
         {authToken ? (
           <button
             onClick={handleLogout}
-            className="text-red-400 hover:text-red-300 transition-colors text-sm sm:text-base"
+            className="text-sm text-red-400 hover:text-red-300 transition-colors"
           >
             Logout
           </button>
         ) : (
           <Link
-            to="/register"
-            className="text-blue-400 hover:text-blue-300 transition-colors text-sm sm:text-base"
+            to="/login"
+            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
           >
-            Register
+            Login
           </Link>
         )}
       </div>
