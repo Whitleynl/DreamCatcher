@@ -12,50 +12,25 @@ const Register = () => {
   const { register, loading, error } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Add test data helper
-  const fillTestData = () => {
-    const random = Math.random().toString(36).substring(7);
-    const testData = {
-      username: `testuser_${random}`,
-      email: `test_${random}@example.com`,
-      password1: 'TestPass123!',
-      password2: 'TestPass123!'
-    };
-    setFormData(testData);
-    console.log('Test data filled:', testData); // Debug log
-  };
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log('Attempting registration with:', formData); // Debug log
-    console.log('Current API URL:', process.env.REACT_APP_BACKEND_URL); // Debug log
+    console.log('Attempting registration with:', formData);
     const success = await register(formData);
-    console.log('Registration result:', success); // Debug log
     if (success) {
       navigate('/');
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow">
-      {/* Add test data button in development */}
-      {process.env.NODE_ENV === 'development' && (
-        <button 
-          type="button" 
-          onClick={fillTestData}
-          className="mb-4 px-4 py-2 bg-gray-500 text-white rounded"
-        >
-          Fill Test Data
-        </button>
-      )}
-
+    <div className="max-w-md mx-auto mt-8 p-6 bg-gray-800 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-6 text-gray-100">Register</h2>
       <form onSubmit={handleRegister} className="space-y-4">
         {error && (
-          <div className="p-3 bg-red-100 text-red-700 rounded">
+          <div className="p-3 bg-red-900/50 text-red-300 rounded">
             {typeof error === 'object' ? JSON.stringify(error) : error}
           </div>
         )}
@@ -66,7 +41,7 @@ const Register = () => {
             value={formData.username}
             onChange={handleChange}
             required
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -77,7 +52,7 @@ const Register = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -88,7 +63,7 @@ const Register = () => {
             value={formData.password1}
             onChange={handleChange}
             required
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -99,13 +74,13 @@ const Register = () => {
             value={formData.password2}
             onChange={handleChange}
             required
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
         <button 
           type="submit" 
           disabled={loading}
-          className="w-full p-2 bg-blue-500 text-white rounded disabled:bg-blue-300"
+          className="w-full p-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors disabled:bg-blue-800 disabled:cursor-not-allowed"
         >
           {loading ? 'Registering...' : 'Register'}
         </button>

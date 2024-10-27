@@ -12,12 +12,9 @@ function DreamList() {
     try {
       setError(null);
       
-      // Set auth header explicitly before request
       if (authToken) {
         api.defaults.headers.common['Authorization'] = `Token ${authToken}`;
       }
-      
-      console.log('Current Auth Header:', api.defaults.headers.common['Authorization']);
       
       const url = query ? `dreams/search/?q=${query}` : 'dreams/';
       console.log('Fetching dreams from:', url);
@@ -39,7 +36,6 @@ function DreamList() {
     }
   };
 
-  // Add back the deleteDream function
   const deleteDream = async (id) => {
     try {
       if (authToken) {
@@ -53,7 +49,6 @@ function DreamList() {
     }
   };
 
-  // Call fetchDreams when authToken changes
   useEffect(() => {
     if (authToken) {
       console.log('Token updated, fetching dreams...');
@@ -62,28 +57,28 @@ function DreamList() {
   }, [authToken, searchTerm]);
 
   return (
-    <div className="p-8 bg-white shadow rounded-lg mt-8">
-      <h2 className="text-2xl font-bold mb-4">Search Dreams</h2>
+    <div className="p-8 bg-gray-800 shadow rounded-lg mt-8">
+      <h2 className="text-2xl font-bold mb-4 text-gray-100">Search Dreams</h2>
       {error && (
-        <div className="p-3 mb-4 bg-red-100 text-red-700 rounded">
+        <div className="p-3 mb-4 bg-red-900/50 text-red-300 rounded">
           {error}
         </div>
       )}
       <input
         type="text"
         placeholder="Search by title or description..."
-        className="p-2 border border-gray-300 rounded-full mb-4 w-full"
+        className="p-2 bg-gray-700 border border-gray-600 rounded-full mb-4 w-full text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <ul className="space-y-4">
         {dreams.length > 0 ? (
           dreams.map((dream) => (
-            <li key={dream.id} className="p-4 border rounded">
-              <h3 className="text-xl font-semibold">{dream.title}</h3>
-              <p className="mt-2">{dream.description}</p>
+            <li key={dream.id} className="p-4 border border-gray-700 rounded bg-gray-800 hover:bg-gray-750">
+              <h3 className="text-xl font-semibold text-gray-100">{dream.title}</h3>
+              <p className="mt-2 text-gray-300">{dream.description}</p>
               <button
-                className="mt-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                className="mt-2 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition-colors"
                 onClick={() => deleteDream(dream.id)}
               >
                 Delete
@@ -91,7 +86,7 @@ function DreamList() {
             </li>
           ))
         ) : (
-          <p>No dreams found.</p>
+          <p className="text-gray-400">No dreams found.</p>
         )}
       </ul>
     </div>

@@ -8,7 +8,6 @@ import Login from './Login';
 import Logout from './Logout';
 import NavBar from './NavBar';
 
-// Create a wrapper component for protected routes
 const ProtectedRoute = ({ children }) => {
   const { authToken } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -27,7 +26,8 @@ function App() {
 
   return (
     <Router>
-      <div className="container mx-auto p-8">
+      <div className="min-h-screen bg-gray-900"> 
+        <div className="container mx-auto p-8">
         <NavBar />
         <Routes>
           {!authToken ? (
@@ -55,7 +55,8 @@ function App() {
           )}
         </Routes>
       </div>
-    </Router>
+    </div>
+  </Router>
   );
 }
 

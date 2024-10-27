@@ -1,3 +1,4 @@
+// Logout.js
 import React, { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +16,6 @@ const Logout = () => {
         navigate('/login');
       } catch (error) {
         console.error('Logout failed:', error);
-        // Navigate anyway since we want to force logout
         navigate('/login');
       }
     };
@@ -25,8 +25,8 @@ const Logout = () => {
 
   return (
     <div className="flex items-center justify-center p-8">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-      <span className="ml-2">Logging out...</span>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-100"></div>
+      <span className="ml-2 text-gray-100">Logging out...</span>
     </div>
   );
 };
