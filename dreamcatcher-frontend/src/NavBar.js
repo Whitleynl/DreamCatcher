@@ -6,7 +6,7 @@ import { ReactComponent as LogoSVG } from './logo.svg';
 const Logo = () => (
   <div className="relative group">
     <LogoSVG
-      className="w-48 h-auto text-gray-100 transition-all duration-500 ease-out
+      className="w-72 h-auto text-gray-100 transition-all duration-500 ease-out
                  group-hover:text-blue-400 group-hover:scale-105"
     />
     {/* Background effect */}
