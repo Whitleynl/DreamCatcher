@@ -43,8 +43,8 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <div>
-                      <DreamForm />
                       <DreamList />
+                      <DreamForm />
                     </div>
                   </ProtectedRoute>
                 }
