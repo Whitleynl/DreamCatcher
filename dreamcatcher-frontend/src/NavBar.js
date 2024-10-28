@@ -30,9 +30,18 @@ const NavBar = () => {
 
   return (
     <nav className="flex items-center justify-between mb-8 p-3 bg-gray-800 shadow rounded">
-      {/* Left section - now empty */}
-      <div className="w-8 sm:w-16">
-        {/* Empty div to maintain spacing */}
+      {/* Left section - Register button */}
+      <div className="w-8 sm:w-16 text-left">
+        {authToken ? (
+          <></>
+        ) : (
+          <Link
+            to="/register"
+            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          >
+            Register
+          </Link>
+        )}
       </div>
 
       {/* Center section - Logo (acts as home button) */}
@@ -40,7 +49,7 @@ const NavBar = () => {
         <Logo />
       </Link>
 
-      {/* Right section - only Logout/Login */}
+      {/* Right section - Logout/Login */}
       <div className="w-8 sm:w-16 text-right">
         {authToken ? (
           <button
@@ -50,20 +59,12 @@ const NavBar = () => {
             Logout
           </button>
         ) : (
-          <>
           <Link
             to="/login"
             className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
           >
             Login
           </Link>
-          <Link
-            to="/register"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            Register
-          </Link>
-          </>
         )}
       </div>
     </nav>
