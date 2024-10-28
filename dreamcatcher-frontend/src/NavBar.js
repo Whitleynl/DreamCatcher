@@ -50,12 +50,20 @@ const NavBar = () => {
             Logout
           </button>
         ) : (
+          <>
           <Link
             to="/login"
             className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
           >
             Login
           </Link>
+          <Link
+            to="/register"
+            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          >
+            Register
+          </Link>
+          </>
         )}
       </div>
     </nav>
