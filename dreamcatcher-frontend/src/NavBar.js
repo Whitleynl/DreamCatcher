@@ -29,9 +29,9 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between mb-8 p-3 bg-gray-800 shadow rounded">
+    <nav className="flex items-center justify-between mb-8 p-4 bg-gray-800 shadow rounded">
       {/* Left section - Register button */}
-      <div className="flex-shrink-0 text-left">
+      <div className="flex-shrink-0 text-left pl-2 sm:pl-4">
         {!authToken && (
           <Link
             to="/register"
@@ -48,7 +48,7 @@ const NavBar = () => {
       </Link>
 
       {/* Right section - Logout/Login */}
-      <div className="flex-shrink-0 text-right">
+      <div className="flex-shrink-0 text-right pr-2 sm:pr-4">
         {authToken ? (
           <button
             onClick={handleLogout}
