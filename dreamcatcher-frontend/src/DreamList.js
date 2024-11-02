@@ -108,9 +108,9 @@ function DreamList() {
               </p>
 
               {/* Footer */}
-              <div className="flex justify-between items-center pt-4 
-                             border-t border-gray-700">
-                <div className="flex space-x-4 text-sm text-gray-400">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pt-4 border-t border-gray-700 space-y-4 sm:space-y-0">
+                {/* Left Side */}
+                <div className="flex flex-wrap space-x-4 text-sm text-gray-400">
                   <span>{new Date(dream.date_logged).toLocaleDateString()}</span>
                   <span>Mood: {dream.mood}</span>
                   {dream.key_symbols && (
@@ -119,24 +119,21 @@ function DreamList() {
                 </div>
                 
                 {/* Actions */}
-                <div className="flex space-x-2">
+                <div className="flex flex-wrap gap-2">
                   <button 
-                    className="p-2 hover:bg-gray-600 rounded text-gray-300
-                               hover:text-gray-100 transition-colors"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
                     onClick={() => {/* Add analyze function */}}
                   >
                     Analyze
                   </button>
                   <button 
-                    className="p-2 hover:bg-gray-600 rounded text-gray-300
-                               hover:text-gray-100 transition-colors"
+                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
                     onClick={() => {/* Add edit function */}}
                   >
                     Edit
                   </button>
                   <button 
-                    className="p-2 hover:bg-red-600 rounded text-gray-300
-                               hover:text-red-100 transition-colors"
+                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
                     onClick={() => deleteDream(dream.id)}
                   >
                     Delete
