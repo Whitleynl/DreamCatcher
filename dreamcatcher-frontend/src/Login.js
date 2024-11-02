@@ -1,4 +1,3 @@
-// Login.js
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from './AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
