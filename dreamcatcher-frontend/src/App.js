@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react'; 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './AuthContext';
+import { AuthContext, AuthProvider } from './AuthContext'; 
 import DreamForm from './DreamForm';
 import DreamList from './DreamList';
 import Register from './Register';
@@ -10,6 +10,8 @@ import NavBar from './NavBar';
 import ProtectedRoute from './ProtectedRoute';
 
 function App() {
+  const { authToken } = useContext(AuthContext); 
+
   return (
     <AuthProvider>
       <Router>
