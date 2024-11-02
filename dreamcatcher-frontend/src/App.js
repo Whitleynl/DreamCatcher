@@ -1,43 +1,27 @@
-import React, { useContext, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './AuthContext';
 import DreamForm from './DreamForm';
 import DreamList from './DreamList';
 import Register from './Register';
 import Login from './Login';
 import Logout from './Logout';
 import NavBar from './NavBar';
-
-const ProtectedRoute = ({ children }) => {
-  const { authToken } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!authToken) {
-      navigate('/login');
-    }
-  }, [authToken, navigate]);
-
-  return authToken ? children : null;
-};
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
-  const { authToken } = useContext(AuthContext);
-
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-900"> 
-        <div className="container mx-auto p-8">
-        <NavBar />
-        <Routes>
-          {!authToken ? (
-            <>
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-900">
+          <div className="container mx-auto p-8">
+            <NavBar />
+            <Routes>
+              {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="*" element={<Navigate to="/login" replace />} />
-            </>
-          ) : (
-            <>
+
+              {/* Protected Routes */}
               <Route
                 path="/"
                 element={
@@ -49,14 +33,25 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/logout" element={<Logout />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </>
-          )}
-        </Routes>
-      </div>
-    </div>
-  </Router>
+              <Route
+                path="/logout"
+                element={
+                  <ProtectedRoute>
+                    <Logout />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Catch-All Route */}
+              <Route
+                path="*"
+                element={<Navigate to={authToken ? "/" : "/login"} replace />}
+              />
+            </Routes>
+          </div>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

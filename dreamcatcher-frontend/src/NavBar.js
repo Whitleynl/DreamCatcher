@@ -1,3 +1,4 @@
+// NavBar.js
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
@@ -30,41 +31,22 @@ const NavBar = () => {
 
   return (
     <nav className="flex items-center justify-between mb-8 p-4 bg-gray-800 shadow rounded">
-      {/* Left section - Register button */}
-      <div className="flex-shrink-0 text-left pl-2 sm:pl-4">
-        {!authToken && (
-          <Link
-            to="/register"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            Register
-          </Link>
-        )}
-      </div>
-
-      {/* Center section - Logo (acts as home button) */}
-      <Link to="/" className="flex-grow flex justify-center items-center">
+      {/* Logo */}
+      <Link to="/" className="flex-shrink-0">
         <Logo />
       </Link>
 
-      {/* Right section - Logout/Login */}
-      <div className="flex-shrink-0 text-right pr-2 sm:pr-4">
-        {authToken ? (
+      {/* Right section - Logout button for authenticated users */}
+      {authToken && (
+        <div className="flex-shrink-0 text-right pr-2 sm:pr-4">
           <button
             onClick={handleLogout}
             className="text-sm text-red-400 hover:text-red-300 transition-colors"
           >
             Logout
           </button>
-        ) : (
-          <Link
-            to="/login"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            Login
-          </Link>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 };
