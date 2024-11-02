@@ -6,7 +6,7 @@ import { ReactComponent as LogoSVG } from './logo.svg';
 const Logo = () => (
   <div className="relative group">
     <LogoSVG
-      className="w-72 h-auto text-gray-100 transition-all duration-500 ease-out
+      className="h-auto w-32 sm:w-48 md:w-56 lg:w-64 xl:w-72 text-gray-100 transition-all duration-500 ease-out
                  group-hover:text-blue-400 group-hover:scale-105"
     />
     {/* Background effect */}
@@ -31,10 +31,8 @@ const NavBar = () => {
   return (
     <nav className="flex items-center justify-between mb-8 p-3 bg-gray-800 shadow rounded">
       {/* Left section - Register button */}
-      <div className="w-8 sm:w-16 text-left">
-        {authToken ? (
-          <></>
-        ) : (
+      <div className="flex-shrink-0 text-left">
+        {!authToken && (
           <Link
             to="/register"
             className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
@@ -45,12 +43,12 @@ const NavBar = () => {
       </div>
 
       {/* Center section - Logo (acts as home button) */}
-      <Link to="/" className="flex justify-center items-center">
+      <Link to="/" className="flex-grow flex justify-center items-center">
         <Logo />
       </Link>
 
       {/* Right section - Logout/Login */}
-      <div className="w-8 sm:w-16 text-right">
+      <div className="flex-shrink-0 text-right">
         {authToken ? (
           <button
             onClick={handleLogout}
