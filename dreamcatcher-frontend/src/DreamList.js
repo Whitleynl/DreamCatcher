@@ -6,6 +6,8 @@ function DreamList() {
   const [dreams, setDreams] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
+  const [editingDream, setEditingDream] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const { authToken } = useContext(AuthContext);
 
   const fetchDreams = async (query = '') => {
@@ -33,6 +35,23 @@ function DreamList() {
           ? 'Authentication failed. Please try logging in again.' 
           : `Failed to fetch dreams: ${error.response?.data?.detail || error.message}`
       );
+    }
+  };
+
+  const updateDream = async (dreamId, updatedData) => {
+    try {
+      if (authToken) {
+        api.defaults.headers.common['Authorization'] = `Token ${authToken}`;
+      }
+      const response = await api.put(`dreams/${dreamId}/`, updatedData);
+      setDreams(dreams.map(dream => 
+        dream.id === dreamId ? response.data : dream
+      ));
+      setIsEditing(false);
+      setEditingDream(null);
+    } catch (error) {
+      console.error('Error updating dream:', error);
+      setError('Failed to update dream');
     }
   };
 
@@ -71,6 +90,113 @@ function DreamList() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
+
+      {/* Edit Modal */}
+      {isEditing && editingDream && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 p-6 rounded-lg w-full max-w-2xl">
+            <h3 className="text-xl font-bold text-gray-100 mb-4">Edit Dream</h3>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              updateDream(editingDream.id, editingDream);
+            }}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-gray-300 mb-2">Title</label>
+                  <input
+                    type="text"
+                    value={editingDream.title}
+                    onChange={(e) => setEditingDream({
+                      ...editingDream,
+                      title: e.target.value
+                    })}
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2">Description</label>
+                  <textarea
+                    value={editingDream.description}
+                    onChange={(e) => setEditingDream({
+                      ...editingDream,
+                      description: e.target.value
+                    })}
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100 h-32"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2">Mood</label>
+                  <input
+                    type="text"
+                    value={editingDream.mood}
+                    onChange={(e) => setEditingDream({
+                      ...editingDream,
+                      mood: e.target.value
+                    })}
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2">Lucidity Level (1-5)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="5"
+                    value={editingDream.lucidity_level}
+                    onChange={(e) => setEditingDream({
+                      ...editingDream,
+                      lucidity_level: parseInt(e.target.value)
+                    })}
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2">Key Symbols</label>
+                  <input
+                    type="text"
+                    value={editingDream.key_symbols || ''}
+                    onChange={(e) => setEditingDream({
+                      ...editingDream,
+                      key_symbols: e.target.value
+                    })}
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={editingDream.recurring}
+                    onChange={(e) => setEditingDream({
+                      ...editingDream,
+                      recurring: e.target.checked
+                    })}
+                    className="bg-gray-700 border border-gray-600 rounded"
+                  />
+                  <label className="text-gray-300">Recurring Dream</label>
+                </div>
+              </div>
+              <div className="flex justify-end space-x-4 mt-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditingDream(null);
+                  }}
+                  className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Dreams Grid */}
       <div className="space-y-6">
@@ -128,7 +254,10 @@ function DreamList() {
                   </button>
                   <button 
                     className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
-                    onClick={() => {/* Add edit function */}}
+                    onClick={() => {
+                      setEditingDream(dream);
+                      setIsEditing(true);
+                    }}
                   >
                     Edit
                   </button>

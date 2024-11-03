@@ -21,7 +21,7 @@ function DreamForm() {
       setMessage('Dream submitted successfully!');
       setTitle('');
       setDescription('');
-      setIsExpanded(false); // Close form after successful submission
+      setIsExpanded(false); 
     } catch (error) {
       console.error('Error submitting dream:', error);
       setMessage('Failed to submit dream');
