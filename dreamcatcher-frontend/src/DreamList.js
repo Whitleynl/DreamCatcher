@@ -13,26 +13,26 @@ function DreamList() {
   const fetchDreams = async (query = '') => {
     try {
       setError(null);
-      
-      if (authToken) {
-        api.defaults.headers.common['Authorization'] = `Token ${authToken}`;
-      }
-      
+
       const url = query ? `dreams/search/?q=${query}` : 'dreams/';
       console.log('Fetching dreams from:', url);
-      
-      const response = await api.get(url);
+
+      const response = await api.get(url, {
+        headers: {
+          Authorization: `Token ${authToken}`,
+        },
+      });
       console.log('Dreams fetch successful:', response.data);
       setDreams(response.data);
     } catch (error) {
       console.error('Dream fetch error:', {
         status: error.response?.status,
         data: error.response?.data,
-        headers: error.config?.headers
+        headers: error.config?.headers,
       });
       setError(
-        error.response?.status === 401 
-          ? 'Authentication failed. Please try logging in again.' 
+        error.response?.status === 401
+          ? 'Authentication failed. Please try logging in again.'
           : `Failed to fetch dreams: ${error.response?.data?.detail || error.message}`
       );
     }
@@ -40,13 +40,16 @@ function DreamList() {
 
   const updateDream = async (dreamId, updatedData) => {
     try {
-      if (authToken) {
-        api.defaults.headers.common['Authorization'] = `Token ${authToken}`;
-      }
-      const response = await api.put(`dreams/${dreamId}/`, updatedData);
-      setDreams(dreams.map(dream => 
-        dream.id === dreamId ? response.data : dream
-      ));
+      const response = await api.put(`dreams/${dreamId}/`, updatedData, {
+        headers: {
+          Authorization: `Token ${authToken}`,
+        },
+      });
+      setDreams(
+        dreams.map((dream) =>
+          dream.id === dreamId ? response.data : dream
+        )
+      );
       setIsEditing(false);
       setEditingDream(null);
     } catch (error) {
@@ -57,10 +60,11 @@ function DreamList() {
 
   const deleteDream = async (id) => {
     try {
-      if (authToken) {
-        api.defaults.headers.common['Authorization'] = `Token ${authToken}`;
-      }
-      await api.delete(`dreams/${id}/`); 
+      await api.delete(`dreams/${id}/`, {
+        headers: {
+          Authorization: `Token ${authToken}`,
+        },
+      });
       setDreams(dreams.filter((dream) => dream.id !== id));
     } catch (error) {
       console.error('Error deleting dream:', error);
@@ -78,7 +82,14 @@ function DreamList() {
   return (
     <div className="p-4 sm:p-8 bg-gray-800 shadow rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-gray-100">Search Dreams</h2>
-      
+
+      {/* Display Error Messages */}
+      {error && (
+        <div className="mb-4 p-4 bg-red-600 text-white rounded">
+          {error}
+        </div>
+      )}
+
       {/* Search Bar */}
       <div className="mb-6">
         <input
@@ -96,20 +107,24 @@ function DreamList() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 p-6 rounded-lg w-full max-w-2xl">
             <h3 className="text-xl font-bold text-gray-100 mb-4">Edit Dream</h3>
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              updateDream(editingDream.id, editingDream);
-            }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                updateDream(editingDream.id, editingDream);
+              }}
+            >
               <div className="space-y-4">
                 <div>
                   <label className="block text-gray-300 mb-2">Title</label>
                   <input
                     type="text"
                     value={editingDream.title}
-                    onChange={(e) => setEditingDream({
-                      ...editingDream,
-                      title: e.target.value
-                    })}
+                    onChange={(e) =>
+                      setEditingDream({
+                        ...editingDream,
+                        title: e.target.value,
+                      })
+                    }
                     className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
                   />
                 </div>
@@ -117,10 +132,12 @@ function DreamList() {
                   <label className="block text-gray-300 mb-2">Description</label>
                   <textarea
                     value={editingDream.description}
-                    onChange={(e) => setEditingDream({
-                      ...editingDream,
-                      description: e.target.value
-                    })}
+                    onChange={(e) =>
+                      setEditingDream({
+                        ...editingDream,
+                        description: e.target.value,
+                      })
+                    }
                     className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100 h-32"
                   />
                 </div>
@@ -129,10 +146,12 @@ function DreamList() {
                   <input
                     type="text"
                     value={editingDream.mood}
-                    onChange={(e) => setEditingDream({
-                      ...editingDream,
-                      mood: e.target.value
-                    })}
+                    onChange={(e) =>
+                      setEditingDream({
+                        ...editingDream,
+                        mood: e.target.value,
+                      })
+                    }
                     className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
                   />
                 </div>
@@ -143,10 +162,12 @@ function DreamList() {
                     min="1"
                     max="5"
                     value={editingDream.lucidity_level}
-                    onChange={(e) => setEditingDream({
-                      ...editingDream,
-                      lucidity_level: parseInt(e.target.value)
-                    })}
+                    onChange={(e) =>
+                      setEditingDream({
+                        ...editingDream,
+                        lucidity_level: parseInt(e.target.value),
+                      })
+                    }
                     className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
                   />
                 </div>
@@ -155,10 +176,12 @@ function DreamList() {
                   <input
                     type="text"
                     value={editingDream.key_symbols || ''}
-                    onChange={(e) => setEditingDream({
-                      ...editingDream,
-                      key_symbols: e.target.value
-                    })}
+                    onChange={(e) =>
+                      setEditingDream({
+                        ...editingDream,
+                        key_symbols: e.target.value,
+                      })
+                    }
                     className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
                   />
                 </div>
@@ -166,10 +189,12 @@ function DreamList() {
                   <input
                     type="checkbox"
                     checked={editingDream.recurring}
-                    onChange={(e) => setEditingDream({
-                      ...editingDream,
-                      recurring: e.target.checked
-                    })}
+                    onChange={(e) =>
+                      setEditingDream({
+                        ...editingDream,
+                        recurring: e.target.checked,
+                      })
+                    }
                     className="bg-gray-700 border border-gray-600 rounded"
                   />
                   <label className="text-gray-300">Recurring Dream</label>
@@ -202,8 +227,8 @@ function DreamList() {
       <div className="space-y-6">
         {dreams.length > 0 ? (
           dreams.map((dream) => (
-            <div 
-              key={dream.id} 
+            <div
+              key={dream.id}
               className="bg-gray-750 p-6 rounded-lg border border-gray-700
                          hover:bg-gray-700 transition-colors duration-200"
             >
@@ -215,13 +240,13 @@ function DreamList() {
                 <div className="flex space-x-2">
                   {dream.lucidity_level > 3 && (
                     <span className="px-2 py-1 bg-blue-500/20 text-blue-300 
-                                   rounded text-sm">
+                                     rounded text-sm">
                       Lucid
                     </span>
                   )}
                   {dream.recurring && (
                     <span className="px-2 py-1 bg-purple-500/20 text-purple-300 
-                                   rounded text-sm">
+                                     rounded text-sm">
                       Recurring
                     </span>
                   )}
@@ -229,45 +254,55 @@ function DreamList() {
               </div>
 
               {/* Description */}
-              <p className="text-gray-300 mb-4">
-                {dream.description}
-              </p>
+              <p className="text-gray-300 mb-4">{dream.description}</p>
 
               {/* Footer */}
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pt-4 border-t border-gray-700 space-y-4 sm:space-y-0">
-                {/* Left Side */}
-                <div className="flex flex-wrap space-x-4 text-sm text-gray-400">
-                  <span>{new Date(dream.date_logged).toLocaleDateString()}</span>
-                  <span>Mood: {dream.mood}</span>
-                  {dream.key_symbols && (
-                    <span>Symbols: {dream.key_symbols}</span>
-                  )}
-                </div>
-                
-                {/* Actions */}
-                <div className="flex flex-wrap gap-2">
-                  <button 
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
-                    onClick={() => {/* Add analyze function */}}
-                  >
-                    Analyze
-                  </button>
-                  <button 
-                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
-                    onClick={() => {
-                      setEditingDream(dream);
-                      setIsEditing(true);
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button 
-                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
-                    onClick={() => deleteDream(dream.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
+              <div className="flex flex-wrap gap-4 text-sm text-gray-200 mb-4">
+                <span className="flex items-center gap-2">
+                  {/* Replace with icon */}
+                  <svg className="w-4 h-4" />
+                  {new Date(dream.date_logged).toLocaleDateString()}
+                </span>
+                <span className="flex items-center gap-2">
+                  {/* Replace with icon */}
+                  <svg className="w-4 h-4" />
+                  Mood: {dream.mood}
+                </span>
+                {dream.key_symbols && (
+                  <span className="flex items-center gap-2">
+                    {/* Replace with icon */}
+                    <svg className="w-4 h-4" />
+                    Symbols: {dream.key_symbols}
+                  </span>
+                )}
+              </div>
+
+              {/* Actions */}
+              <div className="flex flex-wrap gap-2">
+                <button
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                  onClick={() => {
+                    // Implement the analyze function
+                    console.log('Analyze dream:', dream.id);
+                  }}
+                >
+                  Analyze
+                </button>
+                <button
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
+                  onClick={() => {
+                    setEditingDream(dream);
+                    setIsEditing(true);
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
+                  onClick={() => deleteDream(dream.id)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))
