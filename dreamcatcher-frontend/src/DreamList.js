@@ -41,7 +41,7 @@ function DreamList() {
       if (authToken) {
         api.defaults.headers.common['Authorization'] = `Token ${authToken}`;
       }
-      await api.delete(`dreams/${id}/`);
+      await api.delete(`dreams/${id}/`); 
       setDreams(dreams.filter((dream) => dream.id !== id));
     } catch (error) {
       console.error('Error deleting dream:', error);
