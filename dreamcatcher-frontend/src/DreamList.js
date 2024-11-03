@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from './AuthContext';
-import { CalendarIcon, EmojiHappyIcon, TagIcon } from '@heroicons/react/outline';
+import { CalendarDaysIcon, FaceSmileIcon, TagIcon } from '@heroicons/react/24/outline';
 import api from './api';
 
 function DreamList() {
@@ -262,11 +262,11 @@ function DreamList() {
               {/* Footer */}
               <div className="flex flex-wrap gap-4 text-sm text-gray-200 mb-4">
                 <span className="flex items-center gap-2">
-                  <CalendarIcon className="w-5 h-5 text-gray-400" />
+                  <CalendarDaysIcon className="w-5 h-5 text-gray-400" />
                   {new Date(dream.date_logged).toLocaleDateString()}
                 </span>
                 <span className="flex items-center gap-2">
-                  <EmojiHappyIcon className="w-5 h-5 text-gray-400" />
+                  <FaceSmileIcon className="w-5 h-5 text-gray-400" />
                   Mood: {dream.mood}
                 </span>
                 {dream.key_symbols && (
