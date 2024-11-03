@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import { ReactComponent as LogoSVG } from './logo2.svg';
+import { ReactComponent as LogoSVG } from './logo3.svg';
 
 const NavBar = () => {
   const { authToken } = useContext(AuthContext);
