@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from './AuthContext';
+import { CalendarIcon, EmojiHappyIcon, TagIcon } from '@heroicons/react/outline';
 import api from './api';
 
 function DreamList() {
@@ -33,7 +34,9 @@ function DreamList() {
       setError(
         error.response?.status === 401
           ? 'Authentication failed. Please try logging in again.'
-          : `Failed to fetch dreams: ${error.response?.data?.detail || error.message}`
+          : `Failed to fetch dreams: ${
+              error.response?.data?.detail || error.message
+            }`
       );
     }
   };
@@ -259,19 +262,16 @@ function DreamList() {
               {/* Footer */}
               <div className="flex flex-wrap gap-4 text-sm text-gray-200 mb-4">
                 <span className="flex items-center gap-2">
-                  {/* Replace with icon */}
-                  <svg className="w-4 h-4" />
+                  <CalendarIcon className="w-5 h-5 text-gray-400" />
                   {new Date(dream.date_logged).toLocaleDateString()}
                 </span>
                 <span className="flex items-center gap-2">
-                  {/* Replace with icon */}
-                  <svg className="w-4 h-4" />
+                  <EmojiHappyIcon className="w-5 h-5 text-gray-400" />
                   Mood: {dream.mood}
                 </span>
                 {dream.key_symbols && (
                   <span className="flex items-center gap-2">
-                    {/* Replace with icon */}
-                    <svg className="w-4 h-4" />
+                    <TagIcon className="w-5 h-5 text-gray-400" />
                     Symbols: {dream.key_symbols}
                   </span>
                 )}
