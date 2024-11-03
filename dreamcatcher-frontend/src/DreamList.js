@@ -243,13 +243,13 @@ function DreamList() {
                 <div className="flex space-x-2">
                   {dream.lucidity_level > 3 && (
                     <span className="px-2 py-1 bg-blue-500/20 text-blue-300 
-                                     rounded text-sm">
+                                       rounded text-sm">
                       Lucid
                     </span>
                   )}
                   {dream.recurring && (
                     <span className="px-2 py-1 bg-purple-500/20 text-purple-300 
-                                     rounded text-sm">
+                                       rounded text-sm">
                       Recurring
                     </span>
                   )}
@@ -280,7 +280,7 @@ function DreamList() {
               {/* Actions */}
               <div className="flex flex-wrap gap-2">
                 <button
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                  className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors text-sm"
                   onClick={() => {
                     // Implement the analyze function
                     console.log('Analyze dream:', dream.id);
@@ -289,7 +289,7 @@ function DreamList() {
                   Analyze
                 </button>
                 <button
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
+                  className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors text-sm"
                   onClick={() => {
                     setEditingDream(dream);
                     setIsEditing(true);
@@ -298,7 +298,7 @@ function DreamList() {
                   Edit
                 </button>
                 <button
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
+                  className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition-colors text-sm"
                   onClick={() => deleteDream(dream.id)}
                 >
                   Delete
