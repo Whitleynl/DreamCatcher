@@ -18,7 +18,7 @@ const NavBar = () => {
 
       {/* Logout Button */}
       {authToken && (
-        <div className="absolute right-4">
+        <div className="absolute right-5"> 
           <Link
             to="/logout"
             className="text-sm text-red-400 hover:text-red-300 transition-colors"
