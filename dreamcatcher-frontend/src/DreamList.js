@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { AuthContext } from './AuthContext';
-import { CalendarDaysIcon, FaceSmileIcon, TagIcon } from '@heroicons/react/24/outline';
+import { CalendarDaysIcon, FaceSmileIcon, TagIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import api from './api';
 
 function DreamList() {
@@ -9,6 +9,7 @@ function DreamList() {
   const [error, setError] = useState(null);
   const [editingDream, setEditingDream] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [expandedDreamId, setExpandedDreamId] = useState(null);
   const { authToken } = useContext(AuthContext);
 
   const toggleDreamExpansion = (dreamId) => {
