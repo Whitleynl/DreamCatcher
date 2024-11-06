@@ -11,6 +11,10 @@ function DreamList() {
   const [isEditing, setIsEditing] = useState(false);
   const { authToken } = useContext(AuthContext);
 
+  const toggleDreamExpansion = (dreamId) => {
+    setExpandedDreamId(expandedDreamId === dreamId ? null : dreamId);
+  };
+
   const fetchDreams = async () => {
     try {
       setError(null);
@@ -243,84 +247,101 @@ function DreamList() {
         </div>
       )}
 
-      {/* Dreams Grid */}
-      <div className="space-y-6">
+      {/* Modified Dreams Grid */}
+      <div className="space-y-2"> {/* Reduced space between dreams */}
         {filteredDreams.length > 0 ? (
           filteredDreams.map((dream) => (
             <div
               key={dream.id}
-              className="bg-gray-750 p-6 rounded-lg border border-gray-700
-                         hover:bg-gray-700 transition-colors duration-200"
+              className={`bg-gray-750 border border-gray-700 rounded-lg
+                         hover:bg-gray-700 transition-colors duration-200
+                         ${expandedDreamId === dream.id ? 'p-6' : 'p-4'}`}
             >
-              {/* Header */}
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-semibold text-gray-100">
-                  {dream.title}
-                </h3>
-                <div className="flex space-x-2">
-                  {dream.lucidity_level > 3 && (
-                    <span className="px-2 py-1 bg-blue-500/20 text-blue-300 
-                                       rounded text-sm">
-                      Lucid
-                    </span>
-                  )}
-                  {dream.recurring && (
-                    <span className="px-2 py-1 bg-purple-500/20 text-purple-300 
-                                       rounded text-sm">
-                      Recurring
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Description */}
-              <p className="text-gray-300 mb-4">{dream.description}</p>
-
-              {/* Footer */}
-              <div className="flex flex-wrap gap-4 text-sm text-gray-200 mb-4">
-                <span className="flex items-center gap-2">
-                  <CalendarDaysIcon className="w-5 h-5 text-gray-400" />
-                  {new Date(dream.date_logged).toLocaleDateString()}
-                </span>
-                <span className="flex items-center gap-2">
-                  <FaceSmileIcon className="w-5 h-5 text-gray-400" />
-                  Mood: {dream.mood}
-                </span>
-                {dream.key_symbols && (
-                  <span className="flex items-center gap-2">
-                    <TagIcon className="w-5 h-5 text-gray-400" />
-                    Symbols: {dream.key_symbols}
+              {/* Collapsed View (Single Line) */}
+              <div 
+                className="flex items-center justify-between cursor-pointer"
+                onClick={() => toggleDreamExpansion(dream.id)}
+              >
+                <div className="flex items-center space-x-4 flex-grow">
+                  <h3 className="text-xl font-semibold text-gray-100 truncate">
+                    {dream.title}
+                  </h3>
+                  <div className="flex space-x-2">
+                    {dream.lucidity_level > 3 && (
+                      <span className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-sm">
+                        Lucid
+                      </span>
+                    )}
+                    {dream.recurring && (
+                      <span className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded text-sm">
+                        Recurring
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-gray-400 text-sm">
+                    {new Date(dream.date_logged).toLocaleDateString()}
                   </span>
+                </div>
+                {expandedDreamId === dream.id ? (
+                  <ChevronUpIcon className="w-5 h-5 text-gray-400" />
+                ) : (
+                  <ChevronDownIcon className="w-5 h-5 text-gray-400" />
                 )}
               </div>
 
-              {/* Actions */}
-              <div className="flex flex-wrap gap-2">
-                <button
-                  className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors text-sm"
-                  onClick={() => {
-                    // Implement the analyze function
-                    console.log('Analyze dream:', dream.id);
-                  }}
-                >
-                  Analyze
-                </button>
-                <button
-                  className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors text-sm"
-                  onClick={() => {
-                    setEditingDream(dream);
-                    setIsEditing(true);
-                  }}
-                >
-                  Edit
-                </button>
-                <button
-                  className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition-colors text-sm"
-                  onClick={() => deleteDream(dream.id)}
-                >
-                  Delete
-                </button>
-              </div>
+              {/* Expanded View */}
+              {expandedDreamId === dream.id && (
+                <div className="mt-4">
+                  {/* Description */}
+                  <p className="text-gray-300 mb-4">{dream.description}</p>
+
+                  {/* Details */}
+                  <div className="flex flex-wrap gap-4 text-sm text-gray-200 mb-4">
+                    <span className="flex items-center gap-2">
+                      <FaceSmileIcon className="w-5 h-5 text-gray-400" />
+                      Mood: {dream.mood}
+                    </span>
+                    {dream.key_symbols && (
+                      <span className="flex items-center gap-2">
+                        <TagIcon className="w-5 h-5 text-gray-400" />
+                        Symbols: {dream.key_symbols}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors text-sm"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent collapse when clicking button
+                        console.log('Analyze dream:', dream.id);
+                      }}
+                    >
+                      Analyze
+                    </button>
+                    <button
+                      className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors text-sm"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent collapse when clicking button
+                        setEditingDream(dream);
+                        setIsEditing(true);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition-colors text-sm"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent collapse when clicking button
+                        deleteDream(dream.id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ))
         ) : (
