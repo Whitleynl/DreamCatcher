@@ -2,16 +2,6 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { AuthContext } from './AuthContext';
 import { CalendarDaysIcon, FaceSmileIcon, TagIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import api from './api';
-import {
-  AlertDialog,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogTitle,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-} from "@/components/ui/alert-dialog";
 
 function DreamList() {
   const [dreams, setDreams] = useState([]);
@@ -28,7 +18,7 @@ function DreamList() {
   };
 
   const handleDeleteClick = (e, dream) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     setDreamToDelete(dream);
   };
 
@@ -72,20 +62,17 @@ function DreamList() {
   const filteredDreams = useMemo(() => {
     if (!searchTerm) return dreams;
     
-    // Split search term into words and filter out short words
     const searchWords = searchTerm.toLowerCase()
       .split(' ')
-      .filter(word => word.length >= 3); // Ignore words shorter than 3 characters
+      .filter(word => word.length >= 3);
       
-    if (searchWords.length === 0) return dreams; // Return all dreams if only short words entered
+    if (searchWords.length === 0) return dreams;
     
     return dreams.filter(dream => {
       const dreamText = `${dream.title} ${dream.description} ${dream.mood} ${dream.key_symbols || ''}`
         .toLowerCase();
       
-      // Check if ALL search words appear in the dream text
       return searchWords.every(word => {
-        // Match word boundaries to avoid partial word matches
         const regex = new RegExp(`\\b${word}\\b`);
         return regex.test(dreamText);
       });
@@ -275,35 +262,35 @@ function DreamList() {
         </div>
       )}
 
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={dreamToDelete !== null} onOpenChange={() => setDreamToDelete(null)}>
-        <AlertDialogContent className="bg-gray-800 border border-gray-700">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-gray-100">Confirm Deletion</AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-300">
-              Are you sure you want to delete the dream "{dreamToDelete?.title}"? 
+      {/* Custom Delete Confirmation Modal */}
+      {dreamToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 p-6 rounded-lg w-full max-w-md border border-gray-700">
+            <h3 className="text-xl font-bold text-gray-100 mb-2">Confirm Deletion</h3>
+            <p className="text-gray-300 mb-6">
+              Are you sure you want to delete the dream "{dreamToDelete.title}"? 
               This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel 
-              className="bg-gray-700 text-gray-100 hover:bg-gray-600"
-              onClick={cancelDelete}
-            >
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction 
-              className="bg-red-600 text-white hover:bg-red-700"
-              onClick={confirmDelete}
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                className="px-4 py-2 bg-gray-700 text-gray-100 rounded hover:bg-gray-600 transition-colors"
+                onClick={cancelDelete}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                onClick={confirmDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* Modified Dreams Grid */}
-      <div className="space-y-2"> {/* Reduced space between dreams */}
+      {/* Dreams Grid */}
+      <div className="space-y-2">
         {filteredDreams.length > 0 ? (
           filteredDreams.map((dream) => (
             <div
@@ -312,7 +299,7 @@ function DreamList() {
                          hover:bg-gray-700 transition-colors duration-200
                          ${expandedDreamId === dream.id ? 'p-6' : 'p-4'}`}
             >
-              {/* Collapsed View (Single Line) */}
+              {/* Collapsed View */}
               <div 
                 className="flex items-center justify-between cursor-pointer"
                 onClick={() => toggleDreamExpansion(dream.id)}
@@ -347,10 +334,7 @@ function DreamList() {
               {/* Expanded View */}
               {expandedDreamId === dream.id && (
                 <div className="mt-4">
-                  {/* Description */}
                   <p className="text-gray-300 mb-4">{dream.description}</p>
-
-                  {/* Details */}
                   <div className="flex flex-wrap gap-4 text-sm text-gray-200 mb-4">
                     <span className="flex items-center gap-2">
                       <FaceSmileIcon className="w-5 h-5 text-gray-400" />
@@ -363,13 +347,11 @@ function DreamList() {
                       </span>
                     )}
                   </div>
-
-                  {/* Actions */}
                   <div className="flex flex-wrap gap-2">
                     <button
                       className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors text-sm"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent collapse when clicking button
+                        e.stopPropagation();
                         console.log('Analyze dream:', dream.id);
                       }}
                     >
@@ -378,7 +360,7 @@ function DreamList() {
                     <button
                       className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors text-sm"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent collapse when clicking button
+                        e.stopPropagation();
                         setEditingDream(dream);
                         setIsEditing(true);
                       }}
@@ -387,8 +369,8 @@ function DreamList() {
                     </button>
                     <button
                       className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition-colors text-sm"
-                      onClick={(e) => handleDeleteClick(e, dream)} 
-                      > 
+                      onClick={(e) => handleDeleteClick(e, dream)}
+                    >
                       Delete
                     </button>
                   </div>
