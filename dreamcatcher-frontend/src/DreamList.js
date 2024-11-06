@@ -2,6 +2,16 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { AuthContext } from './AuthContext';
 import { CalendarDaysIcon, FaceSmileIcon, TagIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import api from './api';
+import {
+  AlertDialog,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogTitle,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
 
 function DreamList() {
   const [dreams, setDreams] = useState([]);
@@ -10,10 +20,27 @@ function DreamList() {
   const [editingDream, setEditingDream] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [expandedDreamId, setExpandedDreamId] = useState(null);
+  const [dreamToDelete, setDreamToDelete] = useState(null);
   const { authToken } = useContext(AuthContext);
 
   const toggleDreamExpansion = (dreamId) => {
     setExpandedDreamId(expandedDreamId === dreamId ? null : dreamId);
+  };
+
+  const handleDeleteClick = (e, dream) => {
+    e.stopPropagation(); 
+    setDreamToDelete(dream);
+  };
+
+  const confirmDelete = async () => {
+    if (dreamToDelete) {
+      await deleteDream(dreamToDelete.id);
+      setDreamToDelete(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDreamToDelete(null);
   };
 
   const fetchDreams = async () => {
@@ -248,6 +275,33 @@ function DreamList() {
         </div>
       )}
 
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={dreamToDelete !== null} onOpenChange={() => setDreamToDelete(null)}>
+        <AlertDialogContent className="bg-gray-800 border border-gray-700">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-gray-100">Confirm Deletion</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-300">
+              Are you sure you want to delete the dream "{dreamToDelete?.title}"? 
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              className="bg-gray-700 text-gray-100 hover:bg-gray-600"
+              onClick={cancelDelete}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              className="bg-red-600 text-white hover:bg-red-700"
+              onClick={confirmDelete}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Modified Dreams Grid */}
       <div className="space-y-2"> {/* Reduced space between dreams */}
         {filteredDreams.length > 0 ? (
@@ -333,11 +387,8 @@ function DreamList() {
                     </button>
                     <button
                       className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition-colors text-sm"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent collapse when clicking button
-                        deleteDream(dream.id);
-                      }}
-                    >
+                      onClick={(e) => handleDeleteClick(e, dream)} 
+                      > 
                       Delete
                     </button>
                   </div>
