@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { AuthContext } from './AuthContext';
 import { CalendarDaysIcon, FaceSmileIcon, TagIcon } from '@heroicons/react/24/outline';
 import api from './api';
@@ -11,14 +11,10 @@ function DreamList() {
   const [isEditing, setIsEditing] = useState(false);
   const { authToken } = useContext(AuthContext);
 
-  const fetchDreams = async (query = '') => {
+  const fetchDreams = async () => {
     try {
       setError(null);
-
-      const url = query ? `dreams/search/?q=${query}` : 'dreams/';
-      console.log('Fetching dreams from:', url);
-
-      const response = await api.get(url, {
+      const response = await api.get('dreams/', {
         headers: {
           Authorization: `Token ${authToken}`,
         },
@@ -40,6 +36,29 @@ function DreamList() {
       );
     }
   };
+
+  const filteredDreams = useMemo(() => {
+    if (!searchTerm) return dreams;
+    
+    // Split search term into words and filter out short words
+    const searchWords = searchTerm.toLowerCase()
+      .split(' ')
+      .filter(word => word.length >= 3); // Ignore words shorter than 3 characters
+      
+    if (searchWords.length === 0) return dreams; // Return all dreams if only short words entered
+    
+    return dreams.filter(dream => {
+      const dreamText = `${dream.title} ${dream.description} ${dream.mood} ${dream.key_symbols || ''}`
+        .toLowerCase();
+      
+      // Check if ALL search words appear in the dream text
+      return searchWords.every(word => {
+        // Match word boundaries to avoid partial word matches
+        const regex = new RegExp(`\\b${word}\\b`);
+        return regex.test(dreamText);
+      });
+    });
+  }, [dreams, searchTerm]);
 
   const updateDream = async (dreamId, updatedData) => {
     try {
@@ -78,22 +97,20 @@ function DreamList() {
   useEffect(() => {
     if (authToken) {
       console.log('Token updated, fetching dreams...');
-      fetchDreams(searchTerm);
+      fetchDreams();
     }
-  }, [authToken, searchTerm]);
+  }, [authToken]);
 
   return (
     <div className="p-4 sm:p-8 bg-gray-800 shadow rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-gray-100">Search Dreams</h2>
 
-      {/* Display Error Messages */}
       {error && (
         <div className="mb-4 p-4 bg-red-600 text-white rounded">
           {error}
         </div>
       )}
 
-      {/* Search Bar */}
       <div className="mb-6">
         <input
           type="text"
@@ -228,8 +245,8 @@ function DreamList() {
 
       {/* Dreams Grid */}
       <div className="space-y-6">
-        {dreams.length > 0 ? (
-          dreams.map((dream) => (
+        {filteredDreams.length > 0 ? (
+          filteredDreams.map((dream) => (
             <div
               key={dream.id}
               className="bg-gray-750 p-6 rounded-lg border border-gray-700
@@ -307,7 +324,9 @@ function DreamList() {
             </div>
           ))
         ) : (
-          <p className="text-gray-400 text-center py-8">No dreams found.</p>
+          <p className="text-gray-400 text-center py-8">
+            {dreams.length === 0 ? "No dreams found." : "No dreams match your search."}
+          </p>
         )}
       </div>
     </div>
