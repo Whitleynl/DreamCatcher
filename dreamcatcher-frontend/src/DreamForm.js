@@ -42,7 +42,7 @@ function DreamForm() {
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center justify-between text-gray-100 text-xl font-bold mb-4"
       >
-        <span>Submit a New Dream</span>
+        <span>Submit a New Dream!</span>
         <span className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
           ▼
         </span>
