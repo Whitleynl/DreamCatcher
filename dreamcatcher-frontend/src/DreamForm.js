@@ -11,6 +11,8 @@ function DreamForm({ onDreamSubmitted }) {
   const [keySymbols, setKeySymbols] = useState('');
   const [message, setMessage] = useState('');
 
+  console.log('On DreamSubmitted:', onDreamSubmitted);
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
