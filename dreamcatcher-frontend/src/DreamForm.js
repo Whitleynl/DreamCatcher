@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import api from './api';
+import { useDreamContext } from './DreamContext';
 
-function DreamForm({ onDreamSubmitted }) {
+function DreamForm() {
+  const { addDream } = useDreamContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -12,7 +14,7 @@ function DreamForm({ onDreamSubmitted }) {
   const [message, setMessage] = useState('');
 
   console.log('On DreamSubmitted:', onDreamSubmitted);
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -24,7 +26,7 @@ function DreamForm({ onDreamSubmitted }) {
         recurring,
         key_symbols: keySymbols || 'None'
       });
-      onDreamSubmitted(response.data);
+      addDream(response.data);
       setMessage('Dream submitted successfully!');
       setTitle('');
       setDescription('');
