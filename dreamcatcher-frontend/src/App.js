@@ -31,8 +31,12 @@ function App() {
                  element={
                    <ProtectedRoute>
                      <div className="space-y-8">
-                       <DreamForm />
-                       <DreamList />
+                      <div>
+                      <DreamForm />
+                      </div>
+                      <div>
+                        <DreamList />
+                      </div>
                      </div>
                    </ProtectedRoute>
                  }
