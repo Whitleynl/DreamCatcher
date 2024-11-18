@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from './api';
 import { useDreamContext } from './DreamContext';
 
@@ -12,6 +12,15 @@ function DreamForm() {
   const [recurring, setRecurring] = useState(false);
   const [keySymbols, setKeySymbols] = useState('');
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
