@@ -30,7 +30,7 @@ function App() {
                  path="/"
                  element={
                    <ProtectedRoute>
-                     <div className="space-y-8">
+                     <div className="space-y-4">
                       <div>
                       <DreamForm />
                       </div>

@@ -125,7 +125,6 @@ function DreamList() {
 
   return (
     <div className="p-4 sm:p-8 bg-gray-800 shadow rounded-lg">
-      <DreamForm />
       <h2 className="text-2xl font-bold mb-6 text-gray-100">Search Dreams</h2>
 
       {error && (
