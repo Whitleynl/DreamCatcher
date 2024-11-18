@@ -32,8 +32,8 @@ function DreamForm({ onDreamSubmitted }) {
       setKeySymbols('');
       setIsExpanded(false);
     } catch (error) {
-      console.error('Error submitting dream:', error);
-      setMessage('Failed to submit dream');
+      console.error('Error submitting dream:', error.response?.data || error);
+      setMessage(`Failed to submit dream: ${error.response?.data?.detail || error.message}`);
     }
   };
 
