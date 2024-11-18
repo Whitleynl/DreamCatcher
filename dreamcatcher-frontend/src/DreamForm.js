@@ -152,7 +152,7 @@ function DreamForm() {
         </form>
       </div>
       {message && (
-        <p className={`mt-4 ${
+        <p className={`mt-4 transition-opacity duration-500 ease-out ${
           message.includes('Failed') ? 'text-red-400' : 'text-green-400'
         }`}>
           {message}
