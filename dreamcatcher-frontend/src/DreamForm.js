@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from './api';
 
-function DreamForm() {
+function DreamForm({ onDreamSubmitted }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -14,7 +14,7 @@ function DreamForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await api.post('dreams/', {
+      const response = await api.post('dreams/', {
         title,
         description,
         mood,
@@ -22,6 +22,7 @@ function DreamForm() {
         recurring,
         key_symbols: keySymbols || 'None'
       });
+      onDreamSubmitted(response.data);
       setMessage('Dream submitted successfully!');
       setTitle('');
       setDescription('');

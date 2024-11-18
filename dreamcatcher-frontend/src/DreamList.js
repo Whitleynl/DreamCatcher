@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { AuthContext } from './AuthContext';
+import DreamForm from './DreamForm';
 import { CalendarDaysIcon, FaceSmileIcon, TagIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import api from './api';
 
@@ -12,6 +13,10 @@ function DreamList() {
   const [expandedDreamId, setExpandedDreamId] = useState(null);
   const [dreamToDelete, setDreamToDelete] = useState(null);
   const { authToken } = useContext(AuthContext);
+
+  const handleNewDream = (newDream) => {
+    setDreams((prevDreams) => [newDream, ...prevDreams]);
+  }
 
   const toggleDreamExpansion = (dreamId) => {
     setExpandedDreamId(expandedDreamId === dreamId ? null : dreamId);
@@ -122,6 +127,7 @@ function DreamList() {
 
   return (
     <div className="p-4 sm:p-8 bg-gray-800 shadow rounded-lg">
+      <DreamForm onDreamSubmitted={handleNewDream} />
       <h2 className="text-2xl font-bold mb-6 text-gray-100">Search Dreams</h2>
 
       {error && (
